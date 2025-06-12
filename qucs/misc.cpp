@@ -759,6 +759,8 @@ void misc::draw_richtext(QPainter* painter, int x, int y, const QString &text, Q
   int current_text_x = x;
   int current_text_y = y;
   int i = 0;
+  char ch;
+  const QString sUnder = "{_}";
 
   const bool font_size_in_pixels = painter->font().pixelSize() != -1;
 
@@ -774,8 +776,26 @@ void misc::draw_richtext(QPainter* painter, int x, int y, const QString &text, Q
   const int subscript_offset = static_cast<int>(std::round(0.6 * font_size));
   const int superscript_offset = static_cast<int>(std::round(-0.3 * font_size));
 
-  while (text.length()>i) {
-    if ((text[i].toLatin1() == '_' || text[i].toLatin1() == '^')) {
+  while (i < text.length()) {
+    ch = text[i].toLatin1();
+    // Handle special case: "{_}" to set a regular underscore
+    if (i+2 < text.length() && text.mid(i, 3) == sUnder) {
+      // Draw underscore
+      QRect fragment_br;
+      painter->drawText(
+        current_text_x, current_text_y,
+        1, 1,
+        Qt::TextDontClip,
+        "_",
+        &fragment_br);
+
+      all_bounding_rect |= fragment_br;
+      current_text_x += fragment_br.width();
+      i += 3;
+      continue;
+    }
+    // Start of sub- or superscript
+    else if(ch == '_' || ch == '^') {
       if ((i+1) >= text.length()) break;
       bool is_sub = text[i++].toLatin1() == '_';
       int len = 0;
@@ -804,10 +824,16 @@ void misc::draw_richtext(QPainter* painter, int x, int y, const QString &text, Q
     else
     {
       int len = 0;
-      while (text.length()>(i+len)
-             /*!Text[i+len].isNull()*/ && text[i+len].toLatin1() != '_' &&
-	     text[i+len].toLatin1() != '^' && text[i+len].toLatin1() != '\n')
-			len++;
+      while (i+len < text.length() &&
+             text[i+len].toLatin1() != '_' &&
+             text[i+len].toLatin1() != '^' &&
+             text[i+len].toLatin1() != '\n') {
+        // Check to see whether this is start of the underscore special case:
+        if (i+len+2 < text.length() && text.mid(i+len, 3) == sUnder) {
+          break;
+        }
+        len++;
+      }
 
       QRect fragment_br;
       painter->drawText(
