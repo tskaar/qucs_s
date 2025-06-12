@@ -45,7 +45,9 @@ GraphicTextDialog::GraphicTextDialog(QWidget *parent, const char *name)
   vert->addWidget(
         new QLabel(tr("Use LaTeX style for special characters, e.g. \\tau")+
 		   "\n"+
-		   tr("Use _{..} and ^{..} for sub- and super-positions."),
+		   tr("Use _{..} and ^{..} for sub- and super-positions.")+
+		   "\n"+
+		   tr("To include a literal (not formatted) underscore, wrap it in braces: {_}."),
 		   this));
 
   text = new QTextEdit(this);
