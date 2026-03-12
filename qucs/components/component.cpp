@@ -226,9 +226,9 @@ void Component::paint(QPainter *p) {
     }
 
     if (isActive == COMP_IS_OPEN)
-        p->setPen(QPen(Qt::red, 0));
+        p->setPen(QPen(Qt::red, 2));
     else if (isActive & COMP_IS_SHORTEN)
-        p->setPen(QPen(Qt::darkGreen, 0));
+        p->setPen(QPen(Qt::darkGreen, 2));
 
     if (isActive != COMP_IS_ACTIVE) {
         p->drawRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
