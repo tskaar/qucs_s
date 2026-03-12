@@ -228,7 +228,8 @@ void Component::paint(QPainter *p) {
     if (isActive == COMP_IS_OPEN)
         p->setPen(QPen(Qt::red, 2));
     else if (isActive & COMP_IS_SHORTEN)
-        p->setPen(QPen(Qt::darkGreen, 2));
+        // Bright Cyan color for contrast
+        p->setPen(QPen(QColor("#00D7FF"), 2));
 
     if (isActive != COMP_IS_ACTIVE) {
         p->drawRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
