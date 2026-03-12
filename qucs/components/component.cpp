@@ -225,16 +225,27 @@ void Component::paint(QPainter *p) {
         text_br = prop->boundingRect();
     }
 
-    if (isActive == COMP_IS_OPEN)
-        p->setPen(QPen(Qt::red, 2));
-    else if (isActive & COMP_IS_SHORTEN)
-        // Bright Cyan color for contrast
-        p->setPen(QPen(QColor("#00D7FF"), 2));
 
     if (isActive != COMP_IS_ACTIVE) {
-        p->drawRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
+        QPen statusPen;
+
+        if (isActive == COMP_IS_OPEN) {
+            // Dark Red
+            statusPen.setColor(Qt::red);
+            // We want dashed X
+            statusPen.setStyle(Qt::DashLine);
+        } else if (isActive == COMP_IS_SHORTEN) {
+            // Bright Cyan
+            statusPen.setColor(QColor("#00D7FF"));
+        }
+        p->setPen(statusPen);
         p->drawLine(x1, y1, x2, y2);
         p->drawLine(x1, y2, x2, y1);
+        // Draw outer boundary with a stronger effect and solid line
+        statusPen.setWidth(2);
+        statusPen.setStyle(Qt::SolidLine);
+        p->setPen(statusPen);
+        p->drawRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
     }
 
     // draw component bounding box
