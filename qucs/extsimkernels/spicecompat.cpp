@@ -30,48 +30,48 @@ QString spicecompat::check_refdes(QString &Name,QString &SpiceModel)
  */
 QString spicecompat::normalize_value(QString Value)
 {
-    const QRegularExpression r_pattern("^[0-9]+.*Ohm$");
-    const QRegularExpression p_pattern("^[+-]*[0-9]+.*dBm$");
-    const QRegularExpression c_pattern("^[0-9]+.*F$");
-    const QRegularExpression l_pattern("^[0-9]+.*H$");
-    const QRegularExpression v_pattern("^[0-9]+.*V$");
-    const QRegularExpression i_pattern("^[0-9]+.*A$");
-    const QRegularExpression hz_pattern("^[0-9]+.*Hz$");
-    const QRegularExpression s_pattern("^[0-9]+.*S$");
-    const QRegularExpression sec_pattern("^[0-9]+.*s$");
-    const QRegularExpression var_pattern("^[A-Za-z].*$");
+    static const QRegularExpression r_pattern("^[0-9]+.*Ohm$");
+    static const QRegularExpression p_pattern("^[+-]*[0-9]+.*dBm$");
+    static const QRegularExpression c_pattern("^[0-9]+.*F$");
+    static const QRegularExpression l_pattern("^[0-9]+.*H$");
+    static const QRegularExpression v_pattern("^[0-9]+.*V$");
+    static const QRegularExpression i_pattern("^[0-9]+.*A$");
+    static const QRegularExpression hz_pattern("^[0-9]+.*Hz$");
+    static const QRegularExpression s_pattern("^[0-9]+.*S$");
+    static const QRegularExpression sec_pattern("^[0-9]+.*s$");
+    static const QRegularExpression var_pattern("^[A-Za-z].*$");
 
     QString s = Value.remove(' ');
     if (s.startsWith('\'')&&s.endsWith('\'')) return Value; // Expression detected
 
+    if (var_pattern.match(s).hasMatch()) {
+        return ("{" + s + "}").toUpper();
+    }
+
+    if (p_pattern.match(s).hasMatch()) {
+        s.remove("dBm");
+        return s.toUpper();
+    }
+
+    // Unconditionally convert M->Meg
+    s.replace("M", "Meg");
+
     if (r_pattern.match(s).hasMatch()) { // Component value
         s.remove("Ohm");
-        s.replace("M","Meg");
     } else if (c_pattern.match(s).hasMatch()) {
         s.remove("F");
-        s.replace("M","Meg");
     } else if (l_pattern.match(s).hasMatch()) {
         s.remove("H");
-        s.replace("M","Meg");
     } else if (v_pattern.match(s).hasMatch()) {
         s.remove("V");
-        s.replace("M","Meg");
     } else if (i_pattern.match(s).hasMatch()) {
         s.remove("A");
-        s.replace("M","Meg");
     } else if (hz_pattern.match(s).hasMatch()) {
         s.remove("Hz");
-        s.replace("M","Meg");
     } else if (s_pattern.match(s).hasMatch()) {
         s.remove("S");
-        s.replace("M","Meg");
     } else if (sec_pattern.match(s).hasMatch()) {
         s.remove("s");
-        s.replace("M","Meg");
-    } else if (p_pattern.match(s).hasMatch()) {
-        s.remove("dBm");
-    } else if (var_pattern.match(s).hasMatch()) {
-        s = "{" + s + "}";
     }
 
     return s.toUpper();
