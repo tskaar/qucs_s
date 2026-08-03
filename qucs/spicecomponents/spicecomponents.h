@@ -77,6 +77,7 @@
 #include "sp_func.h"
 #include "sp_spiceinit.h"
 #include "incl_script.h"
+#include "sp_preproc_xyce.h"
 
 // Spice simulations
 #include "sp_fourier.h"

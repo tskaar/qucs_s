@@ -23,6 +23,7 @@
 #include "element.h"
 #include "components/component.h"
 #include "components/components.h"
+#include "spicecomponents/sp_preproc_xyce.h"
 #include "spicecomponents/spicecomponents.h"
 #include "paintings/paintings.h"
 #include "diagrams/diagrams.h"
@@ -602,6 +603,7 @@ void Module::registerModules (void) {
       REGISTER_SPICE_SEC_1 (SpiceFunc);
       REGISTER_SPICE_SEC_1 (SpiceSpiceinit);
       REGISTER_SPICE_SEC_1 (InclScript);
+      REGISTER_SPICE_SEC_1 (XycePreProc);
 
 
       // Qucs legacy devices

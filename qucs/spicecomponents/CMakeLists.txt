@@ -22,6 +22,7 @@ sp_lib.cpp
 sp_func.cpp
 sp_spiceinit.cpp
 incl_script.cpp
+sp_preproc_xyce.cpp
 
 #end of SPICE section
 
@@ -117,6 +118,7 @@ sp_lib.h
 sp_func.h
 sp_spiceinit.h
 incl_script.h
+sp_preproc_xyce.h
 
 #end SPICE sections
 
